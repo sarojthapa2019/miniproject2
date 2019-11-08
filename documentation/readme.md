@@ -80,16 +80,26 @@ Body:
     	"accountNumber":11125,
     	"routingNumber":222
     }
-##### Payment with bank
+##### Payment with paypal
 Method: Post
 url: localhost:8084/payment/paypal
 Authorization: Type = Bearer Token
 supply the generated token
 Body: 
 {
-    	"email":11125,
-    	"routingNumber":222
+    	"email":"jp@example.com",
+    	"password":"password"
+    }
+##### Payment with CC
+Method: Post
+url: localhost:8084/payment/cc
+Authorization: Type = Bearer Token
+supply the generated token
+Body: 
+{
+    	"cardNumber":12345566552,
+    	"expiryDate":"password"
     }
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODM2MTM0NDldfQ==
+eyJoaXN0b3J5IjpbLTE1NzMwNTUxNTFdfQ==
 -->
