@@ -51,7 +51,9 @@ Method: post
 url: localhost:8082/order
 Authorization: Type = Bearer Token
 supply the generated token
-Body: nothing to supply in body as data for order are generated from cart with rest calls
+Body: nothing to supply in body as data for order are generated from cart with rest calls after hitting the url
+### Get preferred shipping address
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzk1MzY4MzA2XX0=
+eyJoaXN0b3J5IjpbMTQ3MDg1ODYzM119
 -->
