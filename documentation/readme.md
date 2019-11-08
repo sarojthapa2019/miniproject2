@@ -49,7 +49,9 @@ Body:  {
 ### To place order
 Method: post
 url: localhost:8082/order
-
+Authorization: Type = Bearer Token
+supply the generated token
+Body: nothing to supply in body as data for order are generated from cart with rest calls
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzg3MTc1OTg1XX0=
+eyJoaXN0b3J5IjpbNzk1MzY4MzA2XX0=
 -->
