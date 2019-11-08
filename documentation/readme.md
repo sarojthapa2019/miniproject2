@@ -10,7 +10,7 @@ Body: {
 	"password":"12345"
 }
 
-After suc
+After succesful registration, a user can login and authenticate himself.
 
 ### Login Link
 Method post
@@ -19,6 +19,8 @@ Body: {
 	"username":"saroj",
 	"password":"12345"
 }
+
+After succesful login a jwt token is generated.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUxMTg5NTQ4XX0=
+eyJoaXN0b3J5IjpbLTcwMDQzNTc5Ml19
 -->
