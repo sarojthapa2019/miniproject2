@@ -5,6 +5,20 @@ Use Postman or curl to check
 ### Register Link 
 Method post
 url: localhost:8080/register 
+Body: {
+	"username":"saroj",
+	"password":"12345"
+}
+
+After suc
+
+### Login Link
+Method post
+url: localhost:8080/authenticate
+Body: {
+	"username":"saroj",
+	"password":"12345"
+}
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI4MTk3MjE4NF19
+eyJoaXN0b3J5IjpbLTUxMTg5NTQ4XX0=
 -->
