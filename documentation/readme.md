@@ -86,7 +86,7 @@ Method: Post
 url: localhost:8084/payment
 Authorization: Type = Bearer Token
 supply the generated token
-Header :  {"mode": "paypal_secret_key"}
+Header :  {"secretkey": "paypal_secret_key"}
 Body: 
 {
     	"email":"jp@example.com",
@@ -97,7 +97,7 @@ Method: Post
 url: localhost:8084/payment
 Authorization: Type = Bearer Token
 supply the generated token
-Header :  {"mode": "cc_secret_key"}
+Header :  {"secretkey": "cc_secret_key"}
 Body: 
 {
     	"cardNumber":12345566552,
@@ -105,6 +105,6 @@ Body:
     	"securityCode":"123"
     }
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTg0Mzc5MjU5LC01OTI2MDgwOTAsMTUyMj
-Q4MDc0N119
+eyJoaXN0b3J5IjpbMTcyNTU2MzkzMSwtNTkyNjA4MDkwLDE1Mj
+I0ODA3NDddfQ==
 -->
