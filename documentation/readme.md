@@ -57,7 +57,7 @@ Method: Get
 url: localhost:8083/address
 Authorization: Type = Bearer Token
 supply the generated token
-### Add Ahipping Address
+### Add Shipping Address
 Method: Post
 url: localhost:8083/address
 Authorization: Type = Bearer Token
@@ -66,9 +66,12 @@ Body: {
 	"city": "fairfield",
 	"state": "IA",
 	"country":"USA",
-	"zipCode":"
+	"zipCode":"55227"
 }
 
+### Payment
+##### Payment with bank
+Method: 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExMjI0ODg0NDJdfQ==
+eyJoaXN0b3J5IjpbNjExNDgyNTgwXX0=
 -->
