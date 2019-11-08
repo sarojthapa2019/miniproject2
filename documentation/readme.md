@@ -21,6 +21,9 @@ Body: {
 }
 
 After succesful login a jwt token is generated.
+From now on for accessing all the resources, that jwt token is required.
+
+### To view list of products
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTcwMDQzNTc5Ml19
+eyJoaXN0b3J5IjpbLTgwMTU2ODE2NV19
 -->
