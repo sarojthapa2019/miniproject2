@@ -63,8 +63,12 @@ url: localhost:8083/address
 Authorization: Type = Bearer Token
 supply the generated token
 Body: {
+	"city": "fairfield",
+	"state": "IA",
+	"country":"USA",
+	"zipCode":"
 }
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ4ODc5NzAyOV19
+eyJoaXN0b3J5IjpbLTExMjI0ODg0NDJdfQ==
 -->
