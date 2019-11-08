@@ -24,6 +24,7 @@ After succesful login a jwt token is generated.
 From now on for accessing all the resources, that jwt token is required.
 
 ### To view list of products
+(a few products are saved during 
 Method: post
 url: localhost:8081/product
 Authorization: Type = Bearer Token
@@ -36,7 +37,10 @@ Authorization: Type = Bearer Token
 supply the generated token
 
 ### To add product into cart
-Me
+Method: post
+url: localhost:8082/cart/save
+Authorization: Type = Bearer Token
+supply the generated token
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTkzNTQ5MTA1M119
+eyJoaXN0b3J5IjpbODI3NjI3NDkyXX0=
 -->
