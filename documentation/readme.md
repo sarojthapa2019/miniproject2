@@ -24,6 +24,12 @@ After succesful login a jwt token is generated.
 From now on for accessing all the resources, that jwt token is required.
 
 ### To view list of products
+Method: post
+url: localhost:8081/product
+Authorization: Type = Bearer Token
+supply the generated token
+
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTgwMTU2ODE2NV19
+eyJoaXN0b3J5IjpbMjA2ODE3Nzk4N119
 -->
