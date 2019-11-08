@@ -71,7 +71,25 @@ Body: {
 
 ### Payment
 ##### Payment with bank
-Method: 
+Method: Post
+url: localhost:8084/payment/bank
+Authorization: Type = Bearer Token
+supply the generated token
+Body: 
+{
+    	"accountNumber":11125,
+    	"routingNumber":222
+    }
+##### Payment with bank
+Method: Post
+url: localhost:8084/payment/paypal
+Authorization: Type = Bearer Token
+supply the generated token
+Body: 
+{
+    	"email":11125,
+    	"routingNumber":222
+    }
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjExNDgyNTgwXX0=
+eyJoaXN0b3J5IjpbODM2MTM0NDldfQ==
 -->
