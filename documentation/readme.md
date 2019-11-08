@@ -97,7 +97,7 @@ Method: Post
 url: localhost:8084/payment
 Authorization: Type = Bearer Token
 supply the generated token
-Header :  {"mode": "bank"}
+Header :  {"mode": "cc"}
 Body: 
 {
     	"cardNumber":12345566552,
@@ -105,5 +105,5 @@ Body:
     	"securityCode":"123"
     }
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTE2NjY5MjE3MCwxNTIyNDgwNzQ3XX0=
+eyJoaXN0b3J5IjpbLTU5MjYwODA5MCwxNTIyNDgwNzQ3XX0=
 -->
