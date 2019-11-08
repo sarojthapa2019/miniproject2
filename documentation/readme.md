@@ -29,7 +29,14 @@ url: localhost:8081/product
 Authorization: Type = Bearer Token
 supply the generated token
 
+### To view specific product
+Method: get
+url: localhost:8081/product/id
+Authorization: Type = Bearer Token
+supply the generated token
 
+### To add product into cart
+Me
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA2ODE3Nzk4N119
+eyJoaXN0b3J5IjpbLTkzNTQ5MTA1M119
 -->
