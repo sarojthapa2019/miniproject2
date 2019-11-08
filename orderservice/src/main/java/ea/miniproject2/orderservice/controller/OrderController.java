@@ -39,10 +39,13 @@ public class OrderController {
     @GetMapping(value = "/getorder/{id}")
     public Orders getOrder(@PathVariable long id, @RequestHeader (name="Authorization") String token ) throws UnsupportedEncodingException, JsonProcessingException {
         HashMap<String, String> dataHash= tokenDecoderService.decode(token);
+        Orders o = null;
         if(dataHash.get("role").equals("ROLE_USER")) {
             System.out.println("=========================");
 
-            return orderService.findByUsername(dataHash.get("sub")).get();
+            o = orderService.findByUsername(dataHash.get("sub")).get();
+            o.setBoughtFlag(true);
+           return o;
         }
         return null;
     }

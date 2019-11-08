@@ -1,6 +1,5 @@
 package ea.miniproject2.paymentservice.service;
 
-import ea.miniproject2.paymentservice.model.Orders;
 import ea.miniproject2.paymentservice.model.Payment;
 import org.springframework.http.ResponseEntity;
 
@@ -12,5 +11,8 @@ public interface PaymentService {
     Payment savePayment(Payment payment);
     List<Payment> findAllPayment();
     Optional<Payment> findById(Long id);
-    public ResponseEntity<Orders> getOrder(String token);
+
+    ResponseEntity<String> callBankService(String token, Object object, String mode);
+    ResponseEntity<String> callPaypalService(String token, Object object, String mode);
+    ResponseEntity<String> callCreditCardService(String token, Object object, String mode);
 }

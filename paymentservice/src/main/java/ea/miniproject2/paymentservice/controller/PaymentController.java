@@ -1,11 +1,7 @@
 package ea.miniproject2.paymentservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import ea.miniproject2.paymentservice.model.*;
-import ea.miniproject2.paymentservice.service.BankService;
-import ea.miniproject2.paymentservice.service.CreditCardService;
 import ea.miniproject2.paymentservice.service.PaymentService;
-import ea.miniproject2.paymentservice.service.PaypalService;
 import ea.miniproject2.paymentservice.service.serviceimpl.TokenDecoderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,47 +19,26 @@ public class PaymentController {
     private TokenDecoderService tokenDecoderService;
     @Autowired
     private PaymentService paymentService;
-    @Autowired
-    private BankService bankService;
-    @Autowired
-    private CreditCardService creditCardService;
-    @Autowired
-    private PaypalService paypalService;
 
-    @PostMapping("/payment/bank")
-    public String paymentModeBank(@RequestHeader(name="Authorization") String token, @RequestBody Bank bank) throws UnsupportedEncodingException, JsonProcessingException {
+
+    @PostMapping("/payment")
+    public String paymentModePaypal(@RequestHeader(name="Authorization") String token, @RequestHeader(name="secretkey") String mode  , @RequestBody Object object) throws UnsupportedEncodingException, JsonProcessingException {
         HashMap<String, String> dataHash= tokenDecoderService.decode(token);
-        Orders orders = null;
+
         if(dataHash.get("role").equals("ROLE_USER")) {
-             orders = paymentService.getOrder(token).getBody();
-            return "Payment processed for Order Id "+ orders.getId() +" with amount "+orders.getTotal();
+            if(mode.equals("bank_secret_key")){
+                paymentService.callBankService(token, object, mode);
+            }
+            if(mode.equals("cc_secret_key")){
+                paymentService.callCreditCardService(token, object, mode);
+            }
+            if(mode.equals("paypal_secret_key")){
+                paymentService.callBankService(token, object, mode);
+            }
         }
         return "Sorry cannot make payment";
 
     }
 
-    @PostMapping("/payment/paypal")
-    public String paymentModePaypal(@RequestHeader(name="Authorization") String token, @RequestBody Paypal paypal) throws UnsupportedEncodingException, JsonProcessingException {
-        HashMap<String, String> dataHash= tokenDecoderService.decode(token);
-        Orders orders = null;
-        if(dataHash.get("role").equals("ROLE_USER")) {
-            orders = paymentService.getOrder(token).getBody();
-            return "Payment processed for Order Id"+ orders.getId() +"with amount "+orders.getTotal();
-        }
-        return "Sorry cannot make payment";
-
-    }
-
-    @PostMapping("/payment/cc")
-    public String paymentModeCC(@RequestHeader(name="Authorization") String token, @RequestBody CreditCard cc) throws UnsupportedEncodingException, JsonProcessingException {
-        HashMap<String, String> dataHash= tokenDecoderService.decode(token);
-        Orders orders = null;
-        if(dataHash.get("role").equals("ROLE_USER")) {
-            orders = paymentService.getOrder(token).getBody();
-            return "Payment processed for Order Id"+ orders.getId() +"with amount "+orders.getTotal();
-        }
-        return "Sorry cannot make payment";
-
-    }
 
 }

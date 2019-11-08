@@ -1,6 +1,5 @@
 package ea.miniproject2.paymentservice.service.serviceimpl;
 
-import ea.miniproject2.paymentservice.model.Orders;
 import ea.miniproject2.paymentservice.model.Payment;
 import ea.miniproject2.paymentservice.repository.PaymentRepository;
 import ea.miniproject2.paymentservice.service.PaymentService;
@@ -11,8 +10,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,13 +38,45 @@ public class PaymentServiceImpl implements PaymentService {
     public Optional<Payment> findById(Long id) {
         return paymentRepository.findById(id);
     }
+
     @Override
-    public ResponseEntity<Orders> getOrder(String token){
-        HttpHeaders headers = new HttpHeaders();
+    public  ResponseEntity<String> callBankService(String token, Object object, String secret) {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
         headers.add("Authorization", "Bearer "+token );
-        ResponseEntity<Orders> response = restTemplate.exchange("http://localhost:8082/getorder/{id}", HttpMethod.GET, new HttpEntity<>("parameters", headers),
-                new ParameterizedTypeReference<Orders>() {
+        headers.add("Content-Type", "application/json");
+        headers.add("secret", secret);
+        HttpEntity<Object> formEntity = new HttpEntity<Object>(object, headers);
+        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8085/payment/bank", HttpMethod.POST, formEntity,
+                new ParameterizedTypeReference<String>() {
+                });
+        return response;
+    }
+
+    @Override
+    public ResponseEntity<String> callPaypalService(String token, Object object, String secret) {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+        headers.add("Authorization", "Bearer "+token );
+        headers.add("Content-Type", "application/json");
+        headers.add("secret", secret);
+        HttpEntity<Object> formEntity = new HttpEntity<Object>(object, headers);
+        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8087/payment/paypal", HttpMethod.POST, formEntity,
+                new ParameterizedTypeReference<String>() {
                 },1);
         return response;
     }
+
+    @Override
+    public ResponseEntity<String> callCreditCardService(String token, Object object, String secret) {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+        headers.add("Authorization", "Bearer "+token );
+        headers.add("Content-Type", "application/json");
+        headers.add("secret", secret);
+
+        HttpEntity<Object> formEntity = new HttpEntity<Object>(object, headers);
+        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8086/payment/cc", HttpMethod.POST, formEntity,
+                new ParameterizedTypeReference<String>() {
+                },1);
+        return response;
+    }
+
 }
