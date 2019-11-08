@@ -98,8 +98,9 @@ supply the generated token
 Body: 
 {
     	"cardNumber":12345566552,
-    	"expiryDate":"password"
+    	"expiryDate":"1/28",
+    	"securityCode":"123"
     }
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1NzMwNTUxNTFdfQ==
+eyJoaXN0b3J5IjpbMTUyMjQ4MDc0N119
 -->
