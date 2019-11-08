@@ -72,9 +72,10 @@ Body: {
 ### Payment
 ##### Payment with bank
 Method: Post
-url: localhost:8084/payment/bank
+url: localhost:8084/payment
 Authorization: Type = Bearer Token
 supply the generated token
+Header :  {"mode": "bank"}
 Body: 
 {
     	"accountNumber":11125,
@@ -82,9 +83,10 @@ Body:
     }
 ##### Payment with paypal
 Method: Post
-url: localhost:8084/payment/paypal
+url: localhost:8084/payment
 Authorization: Type = Bearer Token
 supply the generated token
+Header :  {"mode": "paypal"}
 Body: 
 {
     	"email":"jp@example.com",
@@ -92,9 +94,10 @@ Body:
     }
 ##### Payment with CC
 Method: Post
-url: localhost:8084/payment/cc
+url: localhost:8084/payment
 Authorization: Type = Bearer Token
 supply the generated token
+Header :  {"mode": "bank"}
 Body: 
 {
     	"cardNumber":12345566552,
@@ -102,5 +105,5 @@ Body:
     	"securityCode":"123"
     }
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUyMjQ4MDc0N119
+eyJoaXN0b3J5IjpbMTE2NjY5MjE3MCwxNTIyNDgwNzQ3XX0=
 -->
