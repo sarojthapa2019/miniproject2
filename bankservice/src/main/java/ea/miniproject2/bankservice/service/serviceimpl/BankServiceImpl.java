@@ -27,11 +27,14 @@ public class BankServiceImpl implements BankService {
     public Bank saveBank(Bank bank) {
         return bankRepository.save(bank);
     }
+
+
     @Override
     public ResponseEntity<Orders> getOrder(String token){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer "+token );
         final String uri = String.format("http://%s/getorder/{id}", orderUrl);
+        System.out.println("getting order inside bank service ");
         ResponseEntity<Orders> response = null;
         try{
             response = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>("parameters", headers),

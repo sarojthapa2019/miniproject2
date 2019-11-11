@@ -1,10 +1,25 @@
 ## How to Run Application
+First of all deploy the microservices into the minicube
+Steps:
+Start the miniKube 
+minikube start --cpus=4 --memory='6000mb'
+
+For each microservices go to the root directory and hit the following command (all the commands are inside the makefile if you want to run manually each command)
+sudo make k8s-all-create
+
+check if the pod is running
+kubectl get pods
+kubectl logs {podname}
+
+To get the url of the pod
+minikube service {servicename} --url
 
 The whole project consists of multiple microservices. In order to get into the applicaiton fist a user needs to register:
 Use Postman or curl to check
 ### Register Link 
+minikube service authsv --url
 Method post
-url: localhost:8080/register 
+url: url/register 
 Body: {
 	"username":"saroj",
 	"password":"12345"
@@ -14,7 +29,7 @@ After succesful registration, a user can login and authenticate himself.
 
 ### Login Link
 Method post
-url: localhost:8080/authenticate
+url: url/authenticate
 Body: {
 	"username":"saroj",
 	"password":"12345"
@@ -24,21 +39,24 @@ After succesful login a jwt token is generated.
 From now on for accessing all the resources, that jwt token is required.
 
 ### To view list of products
+minikube service productsv --url
 (a few products are saved during initialization)
 Method: post
-url: localhost:8081/product
+url: url/product
 Authorization: Type = Bearer Token
 supply the generated token
 
 ### To view specific product
+minikube service productsv --url
 Method: get
-url: localhost:8081/product/id
+url: url/product/id
 Authorization: Type = Bearer Token
 supply the generated token
 
 ### To add product into cart
+minikube service ordersv --url
 Method: post
-url: localhost:8082/cart/save
+url: url/cart/save
 Authorization: Type = Bearer Token
 supply the generated token
 Body:  {
@@ -47,19 +65,22 @@ Body:  {
         "quantity": 4    
     }
 ### To place order
+minikube service ordersv --url
 Method: post
-url: localhost:8082/order
+url: url/order
 Authorization: Type = Bearer Token
 supply the generated token
 Body: nothing to supply in body as data for order are generated from cart with rest calls after hitting the url
 ### Get preferred shipping address
+minikube service shipsv --url
 Method: Get
-url: localhost:8083/address
+url: url/address
 Authorization: Type = Bearer Token
 supply the generated token
 ### Add Shipping Address
+minikube service shipsv --url
 Method: Post
-url: localhost:8083/address
+url: url/address
 Authorization: Type = Bearer Token
 supply the generated token
 Body: {
@@ -71,8 +92,9 @@ Body: {
 
 ### Payment
 ##### Payment with bank
+minikube service paysv --url
 Method: Post
-url: localhost:8084/payment
+url: url/payment
 Authorization: Type = Bearer Token
 supply the generated token
 Header :  {"secretkey": "bank_secret_key"}
@@ -82,8 +104,9 @@ Body:
     	"routingNumber":222
     }
 ##### Payment with paypal
+minikube service paysv --url
 Method: Post
-url: localhost:8084/payment
+url: url/payment
 Authorization: Type = Bearer Token
 supply the generated token
 Header :  {"secretkey": "paypal_secret_key"}
@@ -93,8 +116,9 @@ Body:
     	"password":"password"
     }
 ##### Payment with CC
+minikube service paysv --url
 Method: Post
-url: localhost:8084/payment
+url: url/payment
 Authorization: Type = Bearer Token
 supply the generated token
 Header :  {"secretkey": "cc_secret_key"}

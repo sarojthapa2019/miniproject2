@@ -27,13 +27,14 @@ public class PaymentController {
 
         if(dataHash.get("role").equals("ROLE_USER")) {
             if(mode.equals("bank_secret_key")){
-                paymentService.callBankService(token, object, mode);
+		System.out.println("iniside payment controller, calling bankservice");
+               return paymentService.callBankService(token, object, mode).getBody();
             }
             if(mode.equals("cc_secret_key")){
-                paymentService.callCreditCardService(token, object, mode);
+               return paymentService.callCreditCardService(token, object, mode).getBody();
             }
             if(mode.equals("paypal_secret_key")){
-                paymentService.callBankService(token, object, mode);
+               return paymentService.callBankService(token, object, mode).getBody();
             }
         }
         return "Sorry cannot make payment";

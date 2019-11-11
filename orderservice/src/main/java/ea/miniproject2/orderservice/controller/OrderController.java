@@ -41,12 +41,14 @@ public class OrderController {
         HashMap<String, String> dataHash= tokenDecoderService.decode(token);
         Orders o = null;
         if(dataHash.get("role").equals("ROLE_USER")) {
-            System.out.println("=========================");
+            System.out.println("======inside order controller===================");
 
             o = orderService.findByUsername(dataHash.get("sub")).get();
+		System.out.println("===getting order from orderservice" + o.getId());
             o.setBoughtFlag(true);
            return o;
         }
+        System.out.println("cannot find order");
         return null;
     }
 

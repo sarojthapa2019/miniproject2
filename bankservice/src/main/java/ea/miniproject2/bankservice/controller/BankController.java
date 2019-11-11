@@ -26,15 +26,16 @@ public class BankController {
 
     @PostMapping("/payment/bank")
     public String paymentModeBank(@RequestHeader(name="Authorization") String token, @RequestHeader(name="secret") String secret,   @RequestBody Bank bank) throws UnsupportedEncodingException, JsonProcessingException {
-       if(secret.equals("bank_secret_key")) {
+
            HashMap<String, String> dataHash = tokenDecoderService.decode(token);
            Orders orders = null;
            if (dataHash.get("role").equals("ROLE_USER")) {
-
+               System.out.println("inside bank controller..");
                orders = bankService.getOrder(token).getBody();
+		        System.out.println("===ORDER ID"+orders.getId());
                return "Payment processed for Order Id " + orders.getId() + " with amount " + orders.getTotal();
            }
-       }
+
         return "Sorry cannot make payment";
 
     }
