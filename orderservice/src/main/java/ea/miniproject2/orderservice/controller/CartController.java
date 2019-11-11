@@ -5,10 +5,7 @@ import ea.miniproject2.orderservice.model.CartEntry;
 import ea.miniproject2.orderservice.service.CartEntryService;
 import ea.miniproject2.orderservice.service.serviceimpl.TokenDecoderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -29,5 +26,12 @@ public class CartController {
         }
     return cartEntryService.findAll();
     }
-
+    @GetMapping("/cart")
+    public List<CartEntry> getCart(@RequestHeader (name = "Authorization") String token) throws UnsupportedEncodingException, JsonProcessingException {
+        HashMap<String, String> dataHash= tokenDecoderService.decode(token);
+        if(dataHash.get("role").equals("ROLE_USER")) {
+            return cartEntryService.findAll();
+        }
+        return null;
+    }
 }

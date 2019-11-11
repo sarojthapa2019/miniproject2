@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: banksv-deployment
+  labels:
+    app: banksv
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: banksv
+  template:
+    metadata:
+      labels:
+        app: banksv
+
+    spec:
+      containers:
+        - name: banksv
+          image: sarose301/banksv:latest
+          ports:
+            - containerPort: 8085
+          env:
+            - name: KEY1
+              valueFrom:
+                configMapKeyRef:
+                  name: banksv-config
+                  key: someKey1
+            - name: ORDER_SERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: banksv-config
+                  key: orderService
+            - name: SERVICE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: banksv-secrets
+                  key: service-api-key
+            #MYSQL
+            - name: MYSQL_HOST
+              value: banksv-db
+
+            - name: MYSQL_SCHEMA
+              value: banksv_db
+
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PORT
+              value: "3306"
+
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: banksv-secrets
+                  key: mysql-root-password

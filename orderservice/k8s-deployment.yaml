@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ordersv-deployment
+  labels:
+    app: ordersv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ordersv
+  template:
+    metadata:
+      labels:
+        app: ordersv
+
+    spec:
+      containers:
+        - name: ordersv
+          image: sarose301/ordersv:latest
+          ports:
+            - containerPort: 8082
+          env:
+            - name: KEY1
+              valueFrom:
+                configMapKeyRef:
+                  name: ordersv-config
+                  key: someKey1
+            - name: PRODUCT_SERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: ordersv-config
+                  key: productService
+            - name: SERVICE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ordersv-secrets
+                  key: service-api-key
+            #MYSQL
+            - name: MYSQL_HOST
+              value: ordersv-db
+
+            - name: MYSQL_PORT
+              value: "3306"
+
+            - name: MYSQL_SCHEMA
+              value: ordersv_db
+
+            - name: MYSQL_USER
+              value: root
+
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ordersv-secrets
+                  key: mysql-root-password

@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ccsv-db
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: ccsv-db-port
+  selector:
+    app: ccsv-db
+    tier: db
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ccsv-db
+spec:
+  selector:
+    matchLabels:
+      app: ccsv-db
+      tier: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ccsv-db
+        tier: db
+    spec:
+      containers:
+        - image: mysql:5.6
+          name: ccsv-db
+          env:
+            # Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ccsv-secrets
+                  key: mysql-root-password
+          ports:
+            - containerPort: 3306
+              name: ccsv-db-port
+          volumeMounts:
+            - name: ccsv-db-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: ccsv-db-persistent-storage
+          persistentVolumeClaim:
+            claimName: ccsv-pv-claim

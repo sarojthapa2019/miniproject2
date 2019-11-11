@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: paysv-db
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: paysv-db-port
+  selector:
+    app: paysv-db
+    tier: db
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paysv-db
+spec:
+  selector:
+    matchLabels:
+      app: paysv-db
+      tier: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: paysv-db
+        tier: db
+    spec:
+      containers:
+        - image: mysql:5.6
+          name: paysv-db
+          env:
+            # Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: paysv-secrets
+                  key: mysql-root-password
+          ports:
+            - containerPort: 3306
+              name: paysv-db-port
+          volumeMounts:
+            - name: paysv-db-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: paysv-db-persistent-storage
+          persistentVolumeClaim:
+            claimName: paysv-pv-claim

@@ -5,6 +5,8 @@ import ea.miniproject2.orderservice.model.Product;
 import ea.miniproject2.orderservice.repository.CartEntryRepository;
 import ea.miniproject2.orderservice.service.CartEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,9 +20,16 @@ import java.util.List;
 @Service
 public class CartEntryServiceImpl implements CartEntryService {
     @Autowired
+    private DiscoveryClient discoveryClient;
+
+    @Autowired
     private CartEntryRepository cartEntryRepository;
     @Autowired
     private RestTemplate restTemplate;
+
+    @Value("${PRODUCT_SERVICE:#{null}}")
+
+    private String producturl;
     @Override
     public CartEntry saveCart(CartEntry cartEntry, String token) {
         Long productId = cartEntry.getProductId();
@@ -38,10 +47,21 @@ public class CartEntryServiceImpl implements CartEntryService {
     public ResponseEntity<Product> getProductById(String token, Long id){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer "+token );
-        ResponseEntity<Product> response = restTemplate.exchange("http://localhost:8081/product/{id}", HttpMethod.GET, new HttpEntity<>("parameters", headers),
-                new ParameterizedTypeReference<Product>() {
-                },id);
-        return response;
+        ResponseEntity<Product> response = null;
+        final String uri = String.format("http://%s/product/{id}",producturl);
+        try{
+            response = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>("parameters", headers),
+                    new ParameterizedTypeReference<Product>() {
+                    },id);
+        }
+        catch (Exception x){
+            x.printStackTrace();
+        }
+        finally {
+            return response;
+        }
+
+
     }
 
     @Override

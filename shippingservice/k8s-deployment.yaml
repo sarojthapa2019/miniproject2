@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipsv-deployment
+  labels:
+    app: shipsv
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: shipsv
+  template:
+    metadata:
+      labels:
+        app: shipsv
+
+    spec:
+      containers:
+        - name: shipsv
+          image: sarose301/shipsv:latest
+          ports:
+            - containerPort: 8088
+          env:
+            - name: SERVICE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: shipsv-secrets
+                  key: service-api-key
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: shipsv-secrets
+                  key: jwtsecret
+            #MYSQL
+            - name: MYSQL_HOST
+              value: shipsv-db
+
+            - name: MYSQL_SCHEMA
+              value: ship_db
+
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PORT
+              value: "3306"
+
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: shipsv-secrets
+                  key: mysql-root-password

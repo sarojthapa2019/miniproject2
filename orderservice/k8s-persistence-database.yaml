@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ordersv-db
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: ordersv-db-port
+  selector:
+    app: ordersv-db
+    tier: db
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ordersv-db
+spec:
+  selector:
+    matchLabels:
+      app: ordersv-db
+      tier: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ordersv-db
+        tier: db
+    spec:
+      containers:
+        - image: mysql:5.6
+          name: ordersv-db
+          env:
+            # Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ordersv-secrets
+                  key: mysql-root-password
+          ports:
+            - containerPort: 3306
+              name: ordersv-db-port
+          volumeMounts:
+            - name: ordersv-db-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: ordersv-db-persistent-storage
+          persistentVolumeClaim:
+            claimName: ordersv-pv-claim

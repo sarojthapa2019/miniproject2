@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authsv-deployment
+  labels:
+    app: authsv
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: authsv
+  template:
+    metadata:
+      labels:
+        app: authsv
+
+    spec:
+      containers:
+        - name: authsv
+          image: sarose301/authsv:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SERVICE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: authsv-secrets
+                  key: service-api-key
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: authsv-secrets
+                  key: jwtsecret
+            #MYSQL
+            - name: MYSQL_HOST
+              value: authsv-db
+
+            - name: MYSQL_SCHEMA
+              value: authsv_db
+
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PORT
+              value: "3306"
+
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: authsv-secrets
+                  key: mysql-root-password

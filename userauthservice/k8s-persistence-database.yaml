@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: authsv-db
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: authsv-db-port
+  selector:
+    app: authsv-db
+    tier: db
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authsv-db
+spec:
+  selector:
+    matchLabels:
+      app: authsv-db
+      tier: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: authsv-db
+        tier: db
+    spec:
+      containers:
+        - image: mysql:5.6
+          name: authsv-db
+          env:
+            # Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: authsv-secrets
+                  key: mysql-root-password
+          ports:
+            - containerPort: 3306
+              name: authsv-db-port
+          volumeMounts:
+            - name: authsv-db-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: authsv-db-persistent-storage
+          persistentVolumeClaim:
+            claimName: authsv-pv-claim

@@ -7,6 +7,7 @@ import ea.miniproject2.orderservice.repository.CartEntryRepository;
 import ea.miniproject2.orderservice.repository.OrderRepository;
 import ea.miniproject2.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +30,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Value("${PRODUCT_SERVICE:#{null}}")
+    private String productUpdateUrl;
 
     @Override
     public Orders saveOrder(Orders orders, String token) {
@@ -74,10 +77,19 @@ public class OrderServiceImpl implements OrderService {
         requestBody.add("Content-Type", "application/json");
 
         HttpEntity<HashMap<Long, Integer>> formEntity = new HttpEntity<HashMap<Long, Integer>>(productIdList, requestBody);
+        ResponseEntity<String> response = null;
+        final String uri = String.format("http://%s/product/updatequantity",productUpdateUrl);
+        try{
+            response = restTemplate.exchange(uri, HttpMethod.POST, formEntity,
+                    new ParameterizedTypeReference<String>() {
+                    });
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+       finally {
+            return response;
+        }
 
-        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8081/product/updatequantity", HttpMethod.POST, formEntity,
-                new ParameterizedTypeReference<String>() {
-                });
-        return response;
     }
 }

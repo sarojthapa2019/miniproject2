@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ccsv-deployment
+  labels:
+    app: ccsv
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ccsv
+  template:
+    metadata:
+      labels:
+        app: ccsv
+
+    spec:
+      containers:
+        - name: ccsv
+          image: sarose301/ccsv:latest
+          ports:
+            - containerPort: 8086
+          env:
+            - name: KEY1
+              valueFrom:
+                configMapKeyRef:
+                  name: ccsv-config
+                  key: someKey1
+            - name: ORDER_SERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: ccsv-config
+                  key: orderService
+            - name: SERVICE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ccsv-secrets
+                  key: service-api-key
+            #MYSQL
+            - name: MYSQL_HOST
+              value: ccsv-db
+
+            - name: MYSQL_SCHEMA
+              value: ccsv_db
+
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PORT
+              value: "3306"
+
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ccsv-secrets
+                  key: mysql-root-password

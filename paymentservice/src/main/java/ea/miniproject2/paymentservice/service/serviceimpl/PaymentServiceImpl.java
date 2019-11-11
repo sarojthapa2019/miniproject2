@@ -4,6 +4,7 @@ import ea.miniproject2.paymentservice.model.Payment;
 import ea.miniproject2.paymentservice.repository.PaymentRepository;
 import ea.miniproject2.paymentservice.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +25,12 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentRepository paymentRepository;
     @Autowired
     private RestTemplate restTemplate;
+    @Value("${BANK_SERVICE:#{null}}")
+    private String bankUrl;
+    @Value("${CC_SERVICE:#{null}}")
+    private String ccUrl;
+    @Value("${PAYPAL_SERVICE:#{null}}")
+    private String paypalUrl;
     @Override
     public Payment savePayment(Payment payment) {
         return paymentRepository.save(payment);
@@ -46,10 +53,20 @@ public class PaymentServiceImpl implements PaymentService {
         headers.add("Content-Type", "application/json");
         headers.add("secret", secret);
         HttpEntity<Object> formEntity = new HttpEntity<Object>(object, headers);
-        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8085/payment/bank", HttpMethod.POST, formEntity,
-                new ParameterizedTypeReference<String>() {
-                });
-        return response;
+        ResponseEntity<String> response = null;
+        final String uri = String.format("http://%s/payment/bank",bankUrl);
+        try{
+            response = restTemplate.exchange(uri, HttpMethod.POST, formEntity,
+                    new ParameterizedTypeReference<String>() {
+                    });
+        }
+       catch (Exception e){
+            e.printStackTrace();
+       }
+        finally {
+            return response;
+        }
+
     }
 
     @Override
@@ -59,10 +76,19 @@ public class PaymentServiceImpl implements PaymentService {
         headers.add("Content-Type", "application/json");
         headers.add("secret", secret);
         HttpEntity<Object> formEntity = new HttpEntity<Object>(object, headers);
-        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8087/payment/paypal", HttpMethod.POST, formEntity,
-                new ParameterizedTypeReference<String>() {
-                },1);
-        return response;
+        ResponseEntity<String> response = null;
+        final String uri = String.format("http://%s/payment/paypal",paypalUrl);
+        try{
+            response = restTemplate.exchange(uri, HttpMethod.POST, formEntity,
+                    new ParameterizedTypeReference<String>() {
+                    });
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            return response;
+        }
     }
 
     @Override
@@ -73,10 +99,19 @@ public class PaymentServiceImpl implements PaymentService {
         headers.add("secret", secret);
 
         HttpEntity<Object> formEntity = new HttpEntity<Object>(object, headers);
-        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8086/payment/cc", HttpMethod.POST, formEntity,
-                new ParameterizedTypeReference<String>() {
-                },1);
-        return response;
+        ResponseEntity<String> response = null;
+        final String uri = String.format("http://%s/payment/cc",ccUrl);
+        try{
+            response = restTemplate.exchange(uri, HttpMethod.POST, formEntity,
+                    new ParameterizedTypeReference<String>() {
+                    });
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            return response;
+        }
     }
 
 }
